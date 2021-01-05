@@ -1,2 +1,2 @@
 # validator
-A simple struct validator written in Go
+A simple struct validator written in Golang
