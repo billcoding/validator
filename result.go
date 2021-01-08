@@ -5,21 +5,21 @@ import (
 	"strings"
 )
 
-// Result
+// Result struct
 type Result struct {
 	StructPtr interface{}
 	Passed    bool
 	Items     []*ResultItem
 }
 
-// ResultItem
+// ResultItem struct
 type ResultItem struct {
 	Field   *reflect.StructField
 	Passed  bool
 	Message string
 }
 
-// Messages
+// Messages return unpassed messages
 func (r *Result) Messages() string {
 	msgs := make([]string, 0)
 	for _, item := range r.Items {

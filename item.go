@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// Item
+// Item struct
 type Item struct {
 	Required  bool      `alias:"required"`
 	Min       float64   `alias:"min"`
@@ -23,7 +23,7 @@ type Item struct {
 	Message   string    `alias:"message"`
 }
 
-// vfuncs
+// vfuncs return VFunc list
 func (i *Item) vfuncs() []funcs.VFunc {
 	return []funcs.VFunc{
 		funcs.RequiredFunc(),
@@ -40,7 +40,7 @@ func (i *Item) vfuncs() []funcs.VFunc {
 	}
 }
 
-// Validate
+// Validate by fields
 func (i *Item) Validate(field *reflect.StructField, value reflect.Value) (bool, string) {
 	if !i.Required {
 		return true, i.Message
@@ -59,7 +59,7 @@ func (i *Item) Validate(field *reflect.StructField, value reflect.Value) (bool, 
 	return passed, i.Message
 }
 
-// String
+// String return json
 func (i *Item) String() string {
 	bytes, _ := json.Marshal(i)
 	return string(bytes)
