@@ -4,17 +4,17 @@ import (
 	"reflect"
 )
 
-// minFunc
+// minFunc struct
 type maxFunc struct {
 	max float64
 }
 
-// MaxFunc
+// MaxFunc method
 func MaxFunc(max float64) VFunc {
 	return &maxFunc{max}
 }
 
-// Accept
+// Accept method
 func (f *maxFunc) Accept(typ reflect.Type) bool {
 	var acceptKinds = map[reflect.Kind]byte{
 		// int types
@@ -44,7 +44,7 @@ func (f *maxFunc) Accept(typ reflect.Type) bool {
 	return have
 }
 
-// Pass
+// Pass method
 func (f *maxFunc) Pass(value reflect.Value) bool {
 	if f.max <= 0 {
 		return true

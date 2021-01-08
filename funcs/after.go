@@ -6,22 +6,22 @@ import (
 	"time"
 )
 
-// afterFunc
+// afterFunc struct
 type afterFunc struct {
 	after time.Time
 }
 
-// AfterFunc
+// AfterFunc method
 func AfterFunc(after time.Time) VFunc {
 	return &afterFunc{after}
 }
 
-// Accept
+// Accept method
 func (f *afterFunc) Accept(typ reflect.Type) bool {
 	return typ.Kind() == reflect.String || typ == reflect.TypeOf(time.Time{})
 }
 
-// Pass
+// Pass method
 func (f *afterFunc) Pass(value reflect.Value) bool {
 	if f.after.IsZero() {
 		return true

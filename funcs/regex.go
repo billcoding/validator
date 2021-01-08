@@ -5,24 +5,24 @@ import (
 	"regexp"
 )
 
-// regexFunc
+// regexFunc struct
 type regexFunc struct {
 	regex string
 }
 
-// RegexFunc
+// RegexFunc method
 func RegexFunc(regex string) VFunc {
 	return &regexFunc{regex}
 }
 
-// Accept
+// Accept method
 func (f *regexFunc) Accept(typ reflect.Type) bool {
 	return typ.Kind() == reflect.String ||
 		(typ.Kind() == reflect.Slice && typ.Elem().Kind() == reflect.String) ||
 		(typ.Kind() == reflect.Array && typ.Elem().Kind() == reflect.String)
 }
 
-// Pass
+// Pass method
 func (f *regexFunc) Pass(value reflect.Value) bool {
 	if f.regex == "" {
 		return true

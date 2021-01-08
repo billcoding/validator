@@ -2,7 +2,7 @@ package funcs
 
 import "reflect"
 
-// VFunc
+// VFunc interface
 type VFunc interface {
 	Accept(typ reflect.Type) bool
 	Pass(value reflect.Value) bool

@@ -2,24 +2,24 @@ package funcs
 
 import "reflect"
 
-// minLengthFunc
+// minLengthFunc struct
 type minLengthFunc struct {
 	minLength int
 }
 
-// MinLengthFunc
+// MinLengthFunc method
 func MinLengthFunc(minLength int) VFunc {
 	return &minLengthFunc{minLength}
 }
 
-// Accept
+// Accept method
 func (f *minLengthFunc) Accept(typ reflect.Type) bool {
 	return typ.Kind() == reflect.String ||
 		(typ.Kind() == reflect.Slice && typ.Elem().Kind() == reflect.String) ||
 		(typ.Kind() == reflect.Array && typ.Elem().Kind() == reflect.String)
 }
 
-// Pass
+// Pass method
 func (f *minLengthFunc) Pass(value reflect.Value) bool {
 	if f.minLength <= 0 {
 		return true

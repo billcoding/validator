@@ -5,21 +5,21 @@ import (
 	"time"
 )
 
-// RequiredFunc
+// requiredFunc struct
 type requiredFunc struct {
 }
 
-// RequiredFunc
+// RequiredFunc method
 func RequiredFunc() VFunc {
 	return &requiredFunc{}
 }
 
-// Accept
+// Accept method
 func (r *requiredFunc) Accept(typ reflect.Type) bool {
 	return typ != nil
 }
 
-// Pass
+// Pass method
 func (r *requiredFunc) Pass(value reflect.Value) bool {
 	switch value.Type().Kind() {
 	case reflect.Array, reflect.Slice:
