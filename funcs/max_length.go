@@ -7,7 +7,7 @@ type maxLengthFunc struct {
 	maxLength int
 }
 
-// LengthFunc method
+// MaxLengthFunc method
 func MaxLengthFunc(maxLength int) VFunc {
 	return &maxLengthFunc{maxLength}
 }
