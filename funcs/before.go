@@ -6,22 +6,22 @@ import (
 	"time"
 )
 
-//Define beforeFunc struct
+// beforeFunc
 type beforeFunc struct {
 	before time.Time
 }
 
-//BeforeFunc
+// BeforeFunc
 func BeforeFunc(before time.Time) VFunc {
 	return &beforeFunc{before}
 }
 
-//Accept
+// Accept
 func (f *beforeFunc) Accept(typ reflect.Type) bool {
 	return typ.Kind() == reflect.String || typ == reflect.TypeOf(time.Time{})
 }
 
-//Pass
+// Pass
 func (f *beforeFunc) Pass(value reflect.Value) bool {
 	if f.before.IsZero() {
 		return true

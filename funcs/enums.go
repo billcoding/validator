@@ -2,24 +2,24 @@ package funcs
 
 import "reflect"
 
-//Define enumsFunc struct
+// enumsFunc
 type enumsFunc struct {
 	enums []string
 }
 
-//EnumsFunc
+// EnumsFunc
 func EnumsFunc(enums ...string) VFunc {
 	return &enumsFunc{enums}
 }
 
-//Accept
+// Accept
 func (f *enumsFunc) Accept(typ reflect.Type) bool {
 	return typ.Kind() == reflect.String ||
 		(typ.Kind() == reflect.Slice && typ.Elem().Kind() == reflect.String) ||
 		(typ.Kind() == reflect.Array && typ.Elem().Kind() == reflect.String)
 }
 
-//Pass
+// Pass
 func (f *enumsFunc) Pass(value reflect.Value) bool {
 	if len(f.enums) <= 0 {
 		return true

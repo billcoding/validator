@@ -4,17 +4,17 @@ import (
 	"reflect"
 )
 
-//Define minFunc struct
+// minFunc
 type minFunc struct {
 	min float64
 }
 
-//MinFunc
+// MinFunc
 func MinFunc(min float64) VFunc {
 	return &minFunc{min}
 }
 
-//Accept
+// Accept
 func (f *minFunc) Accept(typ reflect.Type) bool {
 	var acceptKinds = map[reflect.Kind]byte{
 		// int types
@@ -24,14 +24,14 @@ func (f *minFunc) Accept(typ reflect.Type) bool {
 		reflect.Int:   0,
 		reflect.Int64: 0,
 
-		//uint types
+		// uint types
 		reflect.Uint8:  0,
 		reflect.Uint16: 0,
 		reflect.Uint32: 0,
 		reflect.Uint:   0,
 		reflect.Uint64: 0,
 
-		//float types
+		// float types
 		reflect.Float32: 0,
 		reflect.Float64: 0,
 	}
@@ -44,7 +44,7 @@ func (f *minFunc) Accept(typ reflect.Type) bool {
 	return have
 }
 
-//Pass
+// Pass
 func (f *minFunc) Pass(value reflect.Value) bool {
 	if f.min <= 0 {
 		return true

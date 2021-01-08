@@ -2,24 +2,24 @@ package funcs
 
 import "reflect"
 
-//Define maxLengthFunc struct
+// maxLengthFunc
 type maxLengthFunc struct {
 	maxLength int
 }
 
-//LengthFunc
+// LengthFunc
 func MaxLengthFunc(maxLength int) VFunc {
 	return &maxLengthFunc{maxLength}
 }
 
-//Accept
+// Accept
 func (f *maxLengthFunc) Accept(typ reflect.Type) bool {
 	return typ.Kind() == reflect.String ||
 		(typ.Kind() == reflect.Slice && typ.Elem().Kind() == reflect.String) ||
 		(typ.Kind() == reflect.Array && typ.Elem().Kind() == reflect.String)
 }
 
-//Pass
+// Pass
 func (f *maxLengthFunc) Pass(value reflect.Value) bool {
 	if f.maxLength <= 0 {
 		return true

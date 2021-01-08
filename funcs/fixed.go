@@ -2,24 +2,24 @@ package funcs
 
 import "reflect"
 
-//Define fixedFunc struct
+// fixedFunc
 type fixedFunc struct {
 	fixed string
 }
 
-//FixedFunc
+// FixedFunc
 func FixedFunc(fixed string) VFunc {
 	return &fixedFunc{fixed}
 }
 
-//Accept
+// Accept
 func (f *fixedFunc) Accept(typ reflect.Type) bool {
 	return typ.Kind() == reflect.String ||
 		(typ.Kind() == reflect.Slice && typ.Elem().Kind() == reflect.String) ||
 		(typ.Kind() == reflect.Array && typ.Elem().Kind() == reflect.String)
 }
 
-//Pass
+// Pass
 func (f *fixedFunc) Pass(value reflect.Value) bool {
 	if f.fixed == "" {
 		return true

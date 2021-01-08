@@ -2,24 +2,24 @@ package funcs
 
 import "reflect"
 
-//Define lengthFunc struct
+// lengthFunc
 type lengthFunc struct {
 	length int
 }
 
-//LengthFunc
+// LengthFunc
 func LengthFunc(length int) VFunc {
 	return &lengthFunc{length}
 }
 
-//Accept
+// Accept
 func (f *lengthFunc) Accept(typ reflect.Type) bool {
 	return typ.Kind() == reflect.String ||
 		(typ.Kind() == reflect.Slice && typ.Elem().Kind() == reflect.String) ||
 		(typ.Kind() == reflect.Array && typ.Elem().Kind() == reflect.String)
 }
 
-//Pass
+// Pass
 func (f *lengthFunc) Pass(value reflect.Value) bool {
 	if f.length <= 0 {
 		return true
