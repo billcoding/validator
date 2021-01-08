@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-//Define Item struct
+// Item
 type Item struct {
 	Required  bool      `alias:"required"`
 	Min       float64   `alias:"min"`
@@ -23,12 +23,13 @@ type Item struct {
 	Message   string    `alias:"message"`
 }
 
-//vfuncs
+// vfuncs
 func (i *Item) vfuncs() []funcs.VFunc {
 	return []funcs.VFunc{
 		funcs.RequiredFunc(),
 		funcs.MinFunc(i.Min),
 		funcs.MaxFunc(i.Max),
+		funcs.LengthFunc(i.Length),
 		funcs.FixedFunc(i.Fixed),
 		funcs.EnumsFunc(i.Enums...),
 		funcs.MinLengthFunc(i.MinLength),
@@ -39,7 +40,7 @@ func (i *Item) vfuncs() []funcs.VFunc {
 	}
 }
 
-//Validate
+// Validate
 func (i *Item) Validate(field *reflect.StructField, value reflect.Value) (bool, string) {
 	if !i.Required {
 		return true, i.Message
@@ -58,7 +59,7 @@ func (i *Item) Validate(field *reflect.StructField, value reflect.Value) (bool, 
 	return passed, i.Message
 }
 
-//String
+// String
 func (i *Item) String() string {
 	bytes, _ := json.Marshal(i)
 	return string(bytes)
