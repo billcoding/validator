@@ -41,7 +41,7 @@ func (i *Item) vfuncs() []funcs.VFunc {
 }
 
 // Validate by fields
-func (i *Item) Validate(field *reflect.StructField, value reflect.Value) (bool, string) {
+func (i *Item) Validate(field *reflect.StructField, value *reflect.Value) (bool, string) {
 	if !i.Required {
 		return true, i.Message
 	}
@@ -51,7 +51,13 @@ func (i *Item) Validate(field *reflect.StructField, value reflect.Value) (bool, 
 		if !vFunc.Accept(field.Type) {
 			continue
 		}
-		passed = vFunc.Pass(value)
+
+		passed = value != nil
+		if !passed {
+			break
+		}
+
+		passed = vFunc.Pass(*value)
 		if !passed {
 			break
 		}

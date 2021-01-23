@@ -1,38 +1,37 @@
 package validator
 
 import (
-	"github.com/billcoding/reflectx"
+	"github.com/billcoding/tagparse"
 	"reflect"
 )
 
 // Validator struct
 type Validator struct {
 	structPtr interface{}
-	items     []*Item
 	fields    []*reflect.StructField
+	values    []*reflect.Value
+	items     []interface{}
 }
 
 // New return new Validator
 func New(structPtr interface{}) *Validator {
-	items := make([]*Item, 0)
-	fields := reflectx.CreateFromTag(structPtr, &items, "alias", "validate")
-	if len(items) != len(fields) {
-		panic("[New]invalid len both items and fields")
-	}
+	fields, values, tags := tagparse.Parse(structPtr, new(Item), "alias", "validate")
 	return &Validator{
 		structPtr: structPtr,
-		items:     items,
 		fields:    fields,
+		values:    values,
+		items:     tags,
 	}
 }
 
 // Validate start
 func (v *Validator) Validate() *Result {
-	ritems := make([]*ResultItem, len(v.items), len(v.items))
+	ritems := make([]*ResultItem, len(v.fields))
 	passedCount := 0
-	for pos, item := range v.items {
+	for pos := range v.fields {
 		field := v.fields[pos]
-		value := reflect.ValueOf(v.structPtr).Elem().FieldByName(field.Name)
+		value := v.values[pos]
+		item := v.items[pos].(*Item)
 		resultItem := validate(item, field, value)
 		ritems[pos] = resultItem
 		if resultItem.Passed {
@@ -46,34 +45,7 @@ func (v *Validator) Validate() *Result {
 	}
 }
 
-func validate(item *Item, field *reflect.StructField, value reflect.Value) *ResultItem {
-	var innerInterface interface{}
-	switch {
-	case field.Type.Kind() == reflect.Struct:
-		innerInterface = value.Addr().Interface()
-	case field.Type.Kind() == reflect.Ptr && field.Type.Elem().Kind() == reflect.Struct:
-		innerInterface = value.Elem().Addr().Interface()
-	default:
-		passed, msg := item.Validate(field, value)
-		return &ResultItem{Field: field, Passed: passed, Message: msg}
-	}
-	if !item.Required || innerInterface == nil {
-		return &ResultItem{Field: field, Passed: true}
-	}
-	items := make([]*Item, 0)
-	fields := reflectx.CreateFromTag(innerInterface, &items, "alias", "validate")
-	if len(items) != len(fields) {
-		panic("[New]invalid len both items and fields")
-	}
-	v := &Validator{
-		structPtr: innerInterface,
-		items:     items,
-		fields:    fields,
-	}
-	vresult := v.Validate()
-	return &ResultItem{
-		Field:   field,
-		Passed:  vresult.Passed,
-		Message: vresult.Messages(),
-	}
+func validate(item *Item, field *reflect.StructField, value *reflect.Value) *ResultItem {
+	passed, msg := item.Validate(field, value)
+	return &ResultItem{Field: field, Passed: passed, Message: msg}
 }

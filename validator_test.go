@@ -32,18 +32,6 @@ func TestValidator(t *testing.T) {
 	m := &model{
 		ID:   10,
 		Name: "122222222222",
-		Model2: model2{
-			ID:   1110,
-			Name: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-			Model3: model3{
-				ID:   850,
-				Name: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-				Model4: model4{
-					ID:   1098,
-					Name: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-				},
-			},
-		},
 	}
 	validator := New(m)
 	result := validator.Validate()
