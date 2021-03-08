@@ -16,7 +16,7 @@ type Item struct {
 	MaxLength int       `alias:"maxlength"`
 	Length    int       `alias:"length"`
 	Fixed     string    `alias:"fixed"`
-	Enums     []string  `alias:"enums"`
+	Enums     string    `alias:"enums"`
 	Regex     string    `alias:"regex"`
 	Before    time.Time `alias:"before"`
 	After     time.Time `alias:"after"`
@@ -31,7 +31,7 @@ func (i *Item) vfuncs() []funcs.VFunc {
 		funcs.MaxFunc(i.Max),
 		funcs.LengthFunc(i.Length),
 		funcs.FixedFunc(i.Fixed),
-		funcs.EnumsFunc(i.Enums...),
+		funcs.EnumsFunc(i.Enums),
 		funcs.MinLengthFunc(i.MinLength),
 		funcs.MaxLengthFunc(i.MaxLength),
 		funcs.RegexFunc(i.Regex),

@@ -16,29 +16,10 @@ func MinFunc(min float64) VFunc {
 
 // Accept method
 func (f *minFunc) Accept(typ reflect.Type) bool {
-	var acceptKinds = map[reflect.Kind]byte{
-		// int types
-		reflect.Int8:  0,
-		reflect.Int16: 0,
-		reflect.Int32: 0,
-		reflect.Int:   0,
-		reflect.Int64: 0,
-
-		// uint types
-		reflect.Uint8:  0,
-		reflect.Uint16: 0,
-		reflect.Uint32: 0,
-		reflect.Uint:   0,
-		reflect.Uint64: 0,
-
-		// float types
-		reflect.Float32: 0,
-		reflect.Float64: 0,
-	}
-	_, have := acceptKinds[typ.Kind()]
+	_, have := numberKindMap[typ.Kind()]
 	if !have {
 		if typ.Kind() == reflect.Slice || typ.Kind() == reflect.Array {
-			_, have = acceptKinds[typ.Elem().Kind()]
+			_, have = numberKindMap[typ.Elem().Kind()]
 		}
 	}
 	return have

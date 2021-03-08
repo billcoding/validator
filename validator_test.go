@@ -6,8 +6,8 @@ import (
 )
 
 type model4 struct {
-	ID   int    `validate:"required(T) min(20) message(model4.Id为空)"`
-	Name string `validate:"required(T) minlength(22) message(model4.Name为空)"`
+	ID []byte `validate:"required(T) enums(1,2,3) message(ID不合法)"`
+	//Name []string `validate:"required(T) enums(a,b,c) message(Name不合法)"`
 }
 
 type model3 struct {
@@ -32,6 +32,19 @@ func TestValidator(t *testing.T) {
 	m := &model{
 		ID:   10,
 		Name: "122222222222",
+	}
+	validator := New(m)
+	result := validator.Validate()
+	fmt.Println(result.Passed)
+	if !result.Passed {
+		fmt.Println(result.Messages())
+	}
+}
+
+func TestValidator2(t *testing.T) {
+	m := &model4{
+		ID: []byte{11},
+		//Name: []string{"cxx"},
 	}
 	validator := New(m)
 	result := validator.Validate()
