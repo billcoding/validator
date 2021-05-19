@@ -1,7 +1,7 @@
 package funcs
 
 import (
-	"github.com/billcoding/tagparse"
+	"github.com/billcoding/reflectx"
 	"reflect"
 	"time"
 )
@@ -27,7 +27,7 @@ func (f *beforeFunc) Pass(value reflect.Value) bool {
 		return true
 	}
 	if value.Type().Kind() == reflect.String {
-		return f.Pass(reflect.ValueOf(tagparse.ParseTime(value.String())))
+		return f.Pass(reflect.ValueOf(reflectx.ParseTime(value.String())))
 	} else if value.Type() == reflect.TypeOf(time.Time{}) {
 		return f.before.After(value.Interface().(time.Time))
 	}

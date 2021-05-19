@@ -1,7 +1,7 @@
 package validator
 
 import (
-	"github.com/billcoding/tagparse"
+	"github.com/billcoding/reflectx"
 	"reflect"
 )
 
@@ -15,7 +15,7 @@ type Validator struct {
 
 // New return new Validator
 func New(structPtr interface{}) *Validator {
-	fields, values, tags := tagparse.Parse(structPtr, new(Item), "alias", "validate")
+	fields, values, tags := reflectx.ParseTag(structPtr, new(Item), "alias", "validate", true)
 	return &Validator{
 		structPtr: structPtr,
 		fields:    fields,
