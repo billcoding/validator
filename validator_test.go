@@ -41,13 +41,28 @@ func TestValidator(t *testing.T) {
 	}
 }
 
+type UserDeptPermPost struct {
+	Dept []*UserDeptPerm `json:"dept" validate:"required(T) message(dept不能为空)"`
+}
+
+// UserDeptPerm struct 用户部门权限
+type UserDeptPerm struct {
+	// DeptID 部门ID
+	DeptID string `db:"dept_id" json:"dept_id" generator:"DB_PRI" validate:"required(T) message(dept_id验证未通过) minlength(1)"`
+
+	// DeptName 部门名称
+	DeptName string `db:"dept_name" json:"dept_name" validate:"required(T) message(dept_name验证未通过) minlength(1)"`
+}
+
 func TestValidator2(t *testing.T) {
-	m := &model4{
-		ID: []byte{11},
-		//Name: []string{"cxx"},
+	m := UserDeptPermPost{
+		Dept: []*UserDeptPerm{{}, {}, {}},
 	}
-	validator := New(m)
+	validator := New(&m)
 	result := validator.Validate()
+	fmt.Println(validator.fields)
+	fmt.Println(validator.values)
+	fmt.Println(m)
 	fmt.Println(result.Passed)
 	if !result.Passed {
 		fmt.Println(result.Messages())

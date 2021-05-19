@@ -1,6 +1,9 @@
 package funcs
 
-import "reflect"
+import (
+	"github.com/billcoding/reflectx"
+	"reflect"
+)
 
 // minLengthFunc struct
 type minLengthFunc struct {
@@ -14,9 +17,10 @@ func MinLengthFunc(minLength int) VFunc {
 
 // Accept method
 func (f *minLengthFunc) Accept(typ reflect.Type) bool {
-	return typ.Kind() == reflect.String ||
-		(typ.Kind() == reflect.Slice && typ.Elem().Kind() == reflect.String) ||
-		(typ.Kind() == reflect.Array && typ.Elem().Kind() == reflect.String)
+	return reflectx.IsString(typ) ||
+		((reflectx.IsArray(typ) || reflectx.IsSlice(typ)) && reflectx.IsString(typ.Elem())) ||
+		((reflectx.IsArray(typ) || reflectx.IsSlice(typ)) && reflectx.IsStruct(typ.Elem())) ||
+		((reflectx.IsArray(typ) || reflectx.IsSlice(typ)) && reflectx.IsPtr(typ.Elem()) && reflectx.IsStruct(typ.Elem().Elem()))
 }
 
 // Pass method
@@ -24,15 +28,20 @@ func (f *minLengthFunc) Pass(value reflect.Value) bool {
 	if f.minLength <= 0 {
 		return true
 	}
-	if value.Type().Kind() == reflect.String {
+	typ := value.Type()
+	switch {
+	case reflectx.IsString(typ):
 		return f.minLength <= len(value.String())
-	} else if value.Type().Kind() == reflect.Slice && value.Type().Elem().Kind() == reflect.String ||
-		(value.Type().Kind() == reflect.Array && value.Type().Elem().Kind() == reflect.String) {
+	case (reflectx.IsArray(typ) || reflectx.IsSlice(typ)) && reflectx.IsString(typ.Elem()):
 		for i := 0; i < value.Len(); i++ {
 			if !f.Pass(value.Index(i)) {
 				return false
 			}
 		}
+	case (reflectx.IsArray(typ) || reflectx.IsSlice(typ)) && reflectx.IsStruct(typ.Elem()):
+		return f.minLength <= value.Len()
+	case (reflectx.IsArray(typ) || reflectx.IsSlice(typ)) && reflectx.IsPtr(typ.Elem()) && reflectx.IsStruct(typ.Elem().Elem()):
+		return f.minLength <= value.Len()
 	}
 	return true
 }

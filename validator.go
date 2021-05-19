@@ -26,14 +26,14 @@ func New(structPtr interface{}) *Validator {
 
 // Validate start
 func (v *Validator) Validate() *Result {
-	ritems := make([]*ResultItem, len(v.fields))
+	resultItems := make([]*ResultItem, len(v.fields))
 	passedCount := 0
 	for pos := range v.fields {
 		field := v.fields[pos]
 		value := v.values[pos]
 		item := v.items[pos].(*Item)
 		resultItem := validate(item, field, value)
-		ritems[pos] = resultItem
+		resultItems[pos] = resultItem
 		if resultItem.Passed {
 			passedCount++
 		}
@@ -41,11 +41,11 @@ func (v *Validator) Validate() *Result {
 	return &Result{
 		StructPtr: v.structPtr,
 		Passed:    len(v.items) == passedCount,
-		Items:     ritems,
+		Items:     resultItems,
 	}
 }
 
 func validate(item *Item, field *reflect.StructField, value *reflect.Value) *ResultItem {
-	passed, msg := item.Validate(field, value)
+	passed, msg := item.Validate(*field, *value)
 	return &ResultItem{Field: field, Passed: passed, Message: msg}
 }

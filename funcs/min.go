@@ -1,6 +1,7 @@
 package funcs
 
 import (
+	"github.com/billcoding/reflectx"
 	"reflect"
 )
 
@@ -25,20 +26,19 @@ func (f *minFunc) Accept(typ reflect.Type) bool {
 	return have
 }
 
-// Pass
+// Pass handler
 func (f *minFunc) Pass(value reflect.Value) bool {
 	if f.min <= 0 {
 		return true
 	}
-	switch value.Type().Kind() {
-	default:
-	case reflect.Int8, reflect.Int16, reflect.Int, reflect.Int32, reflect.Int64:
-		return f.min <= float64(value.Int())
-	case reflect.Uint8, reflect.Uint16, reflect.Uint, reflect.Uint32, reflect.Uint64:
+	switch {
+	case reflectx.IsUint(value.Type()):
 		return f.min <= float64(value.Uint())
-	case reflect.Float32, reflect.Float64:
+	case reflectx.IsInt(value.Type()):
+		return f.min <= float64(value.Int())
+	case reflectx.IsFloat(value.Type()):
 		return f.min <= value.Float()
-	case reflect.Array, reflect.Slice:
+	case reflectx.IsSlice(value.Type()) || reflectx.IsArray(value.Type()):
 		for i := 0; i < value.Len(); i++ {
 			passed := f.Pass(value.Index(i))
 			if !passed {
